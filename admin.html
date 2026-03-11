@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin — Wanderlust</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:        #1C1C1E;
+      --ink-mid:    #2C2C2E;
+      --petrol:     #1A3A4A;
+      --petrol-mid: #204F65;
+      --teal:       #2E7D99;
+      --terracota:  #C4623A;
+      --terra-dark: #A84E2C;
+      --ivory:      #F8F4EE;
+      --white:      #FFFFFF;
+      --gray-100:   #F5F5F7;
+      --gray-200:   #E8E8ED;
+      --gray-400:   #AEAEB2;
+      --gray-600:   #6C6C70;
+      --gray-800:   #3A3A3C;
+      --radius:     8px;
+      --radius-lg:  14px;
+      --shadow-sm:  0 2px 10px rgba(28,28,30,0.07);
+      --shadow-md:  0 8px 36px rgba(28,28,30,0.11);
+      --green:      #27AE60;
+      --red:        #C0392B;
+      --amber:      #C8993A;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--gray-100);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input, select, textarea { font-family: inherit; }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .admin-layout { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ─────────────────────────────────────────────── */
+    .admin-sidebar {
+      width: 230px;
+      background: var(--ink);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      overflow-y: auto;
+    }
+    .admin-logo {
+      padding: 24px 22px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+    .admin-logo .logo-mark {
+      width: 28px; height: 28px;
+      border: 1.5px solid var(--terracota);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .admin-logo .logo-mark svg { width: 12px; height: 12px; fill: var(--terracota); }
+    .admin-logo span {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+    .admin-logo span em {
+      display: block;
+      font-style: normal;
+      font-family: 'Jost', sans-serif;
+      font-size: .56rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--terracota);
+      margin-top: 1px;
+    }
+
+    .admin-nav { padding: 12px 0; flex: 1; }
+    .nav-group-label {
+      font-size: .56rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.18);
+      padding: 16px 22px 6px;
+    }
+    .admin-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      font-size: .76rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.38);
+      transition: color .2s, background .2s;
+      border-left: 2px solid transparent;
+    }
+    .admin-nav a:hover { color: rgba(255,255,255,.75); background: rgba(255,255,255,.04); }
+    .admin-nav a.active { color: var(--white); background: rgba(255,255,255,.06); border-left-color: var(--terracota); }
+    .admin-nav a svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+
+    .admin-sidebar-footer {
+      padding: 16px 22px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .admin-sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .72rem;
+      color: rgba(255,255,255,.28);
+      transition: color .2s;
+    }
+    .admin-sidebar-footer a:hover { color: rgba(255,255,255,.65); }
+    .admin-sidebar-footer a svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+    /* ── Main ────────────────────────────────────────────────── */
+    .admin-main {
+      margin-left: 230px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Topbar ──────────────────────────────────────────────── */
+    .admin-topbar {
+      background: var(--white);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+    .topbar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .admin-badge {
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: rgba(196,98,58,.12);
+      color: var(--terracota);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .78rem;
+      font-weight: 500;
+    }
+    .topbar-avatar {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--terracota), var(--teal));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ── Content ─────────────────────────────────────────────── */
+    .admin-content { padding: 32px; flex: 1; }
+
+    /* ── Sections ────────────────────────────────────────────── */
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+
+    /* ── KPI Cards ───────────────────────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 3px solid transparent;
+      transition: border-color .2s, transform .2s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-card.blue  { border-bottom-color: var(--teal); }
+    .kpi-card.terra { border-bottom-color: var(--terracota); }
+    .kpi-card.green { border-bottom-color: var(--green); }
+    .kpi-card.amber { border-bottom-color: var(--amber); }
+
+    .kpi-label {
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 10px;
+    }
+    .kpi-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem;
+      font-weight: 500;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .kpi-sub { font-size: .7rem; color: var(--gray-400); font-weight: 300; }
+
+    /* ── Section header ──────────────────────────────────────── */
+    .section-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .section-hd h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    .section-hd-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ── Table ───────────────────────────────────────────────── */
+    .tbl-wrap {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .tbl-toolbar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tbl-search {
+      flex: 1;
+      min-width: 200px;
+      padding: 8px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: .82rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .tbl-search:focus { border-color: var(--petrol); }
+    .tbl-filter {
+      padding: 8px 12px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: .78rem;
+      color: var(--ink);
+      outline: none;
+      background: var(--white);
+      cursor: pointer;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--gray-100); }
+    th {
+      padding: 11px 16px;
+      text-align: left;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      white-space: nowrap;
+    }
+    td {
+      padding: 13px 16px;
+      font-size: .8rem;
+      color: var(--ink);
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(248,244,238,.4); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .badge-green  { background: rgba(39,174,96,.1);  color: var(--green); }
+    .badge-red    { background: rgba(192,57,43,.1);  color: var(--red); }
+    .badge-amber  { background: rgba(200,153,58,.1); color: var(--amber); }
+    .badge-blue   { background: rgba(46,125,153,.1); color: var(--teal); }
+    .badge-gray   { background: var(--gray-200); color: var(--gray-600); }
+
+    .tbl-actions { display: flex; gap: 6px; }
+    .tbl-btn {
+      padding: 5px 12px;
+      border-radius: var(--radius);
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      transition: all .2s;
+    }
+    .tbl-btn-view { background: var(--gray-100); color: var(--gray-800); }
+    .tbl-btn-view:hover { background: var(--gray-200); }
+    .tbl-btn-danger { background: rgba(192,57,43,.08); color: var(--red); }
+    .tbl-btn-danger:hover { background: rgba(192,57,43,.16); }
+    .tbl-btn-warn { background: rgba(200,153,58,.08); color: var(--amber); }
+    .tbl-btn-warn:hover { background: rgba(200,153,58,.16); }
+    .tbl-btn-success { background: rgba(39,174,96,.08); color: var(--green); }
+    .tbl-btn-success:hover { background: rgba(39,174,96,.16); }
+
+    .tbl-empty {
+      padding: 52px;
+      text-align: center;
+      color: var(--gray-400);
+      font-size: .82rem;
+      font-weight: 300;
+    }
+    .tbl-pagination {
+      padding: 14px 20px;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .75rem;
+      color: var(--gray-600);
+    }
+    .tbl-pagination-info { font-weight: 300; }
+    .tbl-page-btns { display: flex; gap: 4px; }
+    .page-btn {
+      width: 30px; height: 30px;
+      border-radius: var(--radius);
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      background: var(--gray-100);
+      transition: all .18s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .page-btn:hover { background: var(--gray-200); }
+    .page-btn.active { background: var(--petrol); color: var(--white); }
+    .page-btn:disabled { opacity: .35; pointer-events: none; }
+
+    /* ── Modal ───────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(28,28,30,.62);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 540px;
+      max-height: 88vh;
+      overflow-y: auto;
+      transform: translateY(16px) scale(.98);
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 24px 64px rgba(0,0,0,.18);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-head {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-head h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    .modal-close-btn {
+      width: 30px; height: 30px;
+      border-radius: var(--radius);
+      background: var(--gray-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem;
+      color: var(--gray-600);
+      transition: background .2s;
+    }
+    .modal-close-btn:hover { background: var(--gray-200); }
+    .modal-body { padding: 24px; }
+    .modal-body .form-group { margin-bottom: 18px; }
+    .modal-body label {
+      display: block;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gray-800);
+      margin-bottom: 7px;
+    }
+    .modal-body input,
+    .modal-body select,
+    .modal-body textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: .84rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .modal-body input:focus,
+    .modal-body select:focus,
+    .modal-body textarea:focus { border-color: var(--petrol); }
+    .modal-body textarea { resize: vertical; min-height: 80px; }
+    .modal-foot {
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 20px;
+      border-radius: var(--radius);
+      font-size: .73rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: all .2s;
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--terracota); color: var(--white); }
+    .btn-primary:hover { background: var(--terra-dark); }
+    .btn-petrol { background: var(--petrol); color: var(--white); }
+    .btn-petrol:hover { background: var(--petrol-mid); }
+    .btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--gray-200); }
+    .btn-ghost:hover { background: var(--gray-100); }
+    .btn-danger { background: rgba(192,57,43,.1); color: var(--red); }
+    .btn-danger:hover { background: rgba(192,57,43,.2); }
+    .btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+    /* ── Detail list ─────────────────────────────────────────── */
+    .detail-list { list-style: none; }
+    .detail-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-200);
+      font-size: .82rem;
+      gap: 14px;
+    }
+    .detail-list li:last-child { border-bottom: none; }
+    .detail-list .dl-key { color: var(--gray-600); font-weight: 400; flex-shrink: 0; }
+    .detail-list .dl-val { color: var(--ink); font-weight: 500; text-align: right; }
+
+    /* ── Chart bar ───────────────────────────────────────────── */
+    .mini-chart { display: flex; gap: 4px; align-items: flex-end; height: 50px; margin-top: 8px; }
+    .chart-bar {
+      flex: 1;
+      background: rgba(196,98,58,.18);
+      border-radius: 3px 3px 0 0;
+      transition: background .2s;
+      position: relative;
+      cursor: default;
+    }
+    .chart-bar:hover { background: rgba(196,98,58,.38); }
+    .chart-bar[data-active] { background: var(--terracota); }
+
+    /* ── Overview cards ──────────────────────────────────────── */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .ov-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .ov-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .ov-card .ov-sub { font-size: .72rem; color: var(--gray-400); margin-bottom: 16px; font-weight: 300; }
+
+    /* ── Toast ───────────────────────────────────────────────── */
+    .toast-wrap {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: var(--ink);
+      color: rgba(255,255,255,.82);
+      padding: 12px 16px;
+      font-size: .78rem;
+      border-left: 2px solid var(--terracota);
+      border-radius: 4px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+      display: flex; align-items: center; gap: 9px;
+      transform: translateX(120%);
+      transition: transform .3s cubic-bezier(.34,1.4,.64,1);
+      max-width: 300px;
+    }
+    .toast.show { transform: translateX(0); }
+    .toast.success { border-left-color: var(--green); }
+    .toast.error   { border-left-color: var(--red); }
+
+    /* ── Confirm dialog ──────────────────────────────────────── */
+    .confirm-overlay {
+      position: fixed; inset: 0;
+      background: rgba(28,28,30,.5);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s;
+    }
+    .confirm-overlay.open { opacity: 1; pointer-events: all; }
+    .confirm-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,.18);
+      transform: scale(.95);
+      transition: transform .22s;
+    }
+    .confirm-overlay.open .confirm-box { transform: scale(1); }
+    .confirm-icon {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin: 0 auto 14px;
+    }
+    .confirm-icon.danger { background: rgba(192,57,43,.1); }
+    .confirm-box h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 8px; }
+    .confirm-box p { font-size: .8rem; color: var(--gray-600); font-weight: 300; line-height: 1.65; margin-bottom: 22px; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+
+    /* ── Loading ─────────────────────────────────────────────── */
+    .loading-row td {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray-400);
+      font-size: .8rem;
+      font-weight: 300;
+    }
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid var(--gray-200);
+      border-top-color: var(--terracota);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .admin-sidebar { width: 0; overflow: hidden; }
+      .admin-main { margin-left: 0; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .overview-grid { grid-template-columns: 1fr; }
+      .admin-content { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Confirm Dialog ──────────────────────────────────────── -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon danger">🗑️</div>
+    <h3 id="confirmTitle">Tem a certeza?</h3>
+    <p id="confirmMsg">Esta acção não pode ser desfeita.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn btn-danger" id="confirmBtn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast container ────────────────────────────────────── -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ── User Detail Modal ───────────────────────────────────── -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Detalhes do utilizador</h3>
+      <button class="modal-close-btn" onclick="closeModal('userModal')">✕</button>
+    </div>
+    <div class="modal-body" id="userModalBody">
+      <ul class="detail-list" id="userDetailList"></ul>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('userModal')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Trip Detail Modal ───────────────────────────────────── -->
+<div class="modal-overlay" id="tripModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Detalhes da viagem</h3>
+      <button class="modal-close-btn" onclick="closeModal('tripModal')">✕</button>
+    </div>
+    <div class="modal-body" id="tripModalBody">
+      <ul class="detail-list" id="tripDetailList"></ul>
+    </div>
+    <div class="modal-foot" id="tripModalFoot">
+      <button class="btn btn-ghost" onclick="closeModal('tripModal')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Edit User Modal ─────────────────────────────────────── -->
+<div class="modal-overlay" id="editUserModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Editar utilizador</h3>
+      <button class="modal-close-btn" onclick="closeModal('editUserModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editUserId">
+      <div class="form-group">
+        <label>Nome completo</label>
+        <input type="text" id="editUserName">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="editUserEmail">
+      </div>
+      <div class="form-group">
+        <label>Localização</label>
+        <input type="text" id="editUserLocation">
+      </div>
+      <div class="form-group">
+        <label>Papel</label>
+        <select id="editUserRole">
+          <option value="user">Utilizador</option>
+          <option value="admin">Administrador</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('editUserModal')">Cancelar</button>
+      <button class="btn btn-petrol" onclick="saveUser()">Guardar alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Layout ─────────────────────────────────────────────── -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"/></svg>
+      </div>
+      <span>Wanderlust <em>Admin Panel</em></span>
+    </div>
+
+    <nav class="admin-nav">
+      <div class="nav-group-label">Principal</div>
+      <a href="#" class="active" data-section="overview" onclick="switchSection('overview',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Visão Geral
+      </a>
+      <a href="#" data-section="users" onclick="switchSection('users',this)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Utilizadores
+      </a>
+      <a href="#" data-section="trips" onclick="switchSection('trips',this)">
+        <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        Viagens
+      </a>
+      <a href="#" data-section="favorites" onclick="switchSection('favorites',this)">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Favoritos
+      </a>
+
+      <div class="nav-group-label">Sistema</div>
+      <a href="dashboard.html">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Ir para o site
+      </a>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <a href="login.html" onclick="localStorage.removeItem('wl_user')">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Terminar sessão
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <span class="topbar-title" id="topbarTitle">Visão Geral</span>
+      <div class="topbar-right">
+        <span class="admin-badge">Admin</span>
+        <div class="topbar-user">
+          <div class="topbar-avatar" id="adminAvatar">A</div>
+          <span id="adminName">Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- ── VISÃO GERAL ─────────────────────────────────── -->
+      <div class="admin-section active" id="sec-overview">
+
+        <div class="kpi-grid" id="kpiGrid">
+          <div class="kpi-card blue">
+            <div class="kpi-label">Total utilizadores</div>
+            <div class="kpi-value" id="kpi-users">—</div>
+            <div class="kpi-sub">registados</div>
+          </div>
+          <div class="kpi-card terra">
+            <div class="kpi-label">Viagens planeadas</div>
+            <div class="kpi-value" id="kpi-trips">—</div>
+            <div class="kpi-sub">de todos os utilizadores</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-label">Total favoritos</div>
+            <div class="kpi-value" id="kpi-favs">—</div>
+            <div class="kpi-sub">destinos guardados</div>
+          </div>
+          <div class="kpi-card amber">
+            <div class="kpi-label">Novos (30 dias)</div>
+            <div class="kpi-value" id="kpi-new">—</div>
+            <div class="kpi-sub">utilizadores</div>
+          </div>
+        </div>
+
+        <div class="overview-grid">
+          <div class="ov-card">
+            <h4>Últimos utilizadores</h4>
+            <p class="ov-sub">Os 5 mais recentes</p>
+            <ul class="detail-list" id="recentUsers"></ul>
+          </div>
+          <div class="ov-card">
+            <h4>Últimas viagens</h4>
+            <p class="ov-sub">Planeamentos recentes</p>
+            <ul class="detail-list" id="recentTrips"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── UTILIZADORES ────────────────────────────────── -->
+      <div class="admin-section" id="sec-users">
+        <div class="section-hd">
+          <h2>Gestão de utilizadores</h2>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar">
+            <input class="tbl-search" type="search" placeholder="Pesquisar por nome ou email…" id="userSearch" oninput="filterUsers()">
+            <select class="tbl-filter" id="userRoleFilter" onchange="filterUsers()">
+              <option value="">Todos os papéis</option>
+              <option value="admin">Administradores</option>
+              <option value="user">Utilizadores</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Localização</th>
+                <th>Papel</th>
+                <th>Registado em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <tr class="loading-row"><td colspan="7"><span class="spinner"></span>A carregar…</td></tr>
+            </tbody>
+          </table>
+          <div class="tbl-pagination">
+            <span class="tbl-pagination-info" id="usersPagInfo"></span>
+            <div class="tbl-page-btns" id="usersPagBtns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIAGENS ─────────────────────────────────────── -->
+      <div class="admin-section" id="sec-trips">
+        <div class="section-hd">
+          <h2>Viagens planeadas</h2>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar">
+            <input class="tbl-search" type="search" placeholder="Pesquisar por destino ou referência…" id="tripSearch" oninput="filterTrips()">
+            <select class="tbl-filter" id="tripStatusFilter" onchange="filterTrips()">
+              <option value="">Todos</option>
+              <option value="upcoming">Próximas</option>
+              <option value="past">Passadas</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Referência</th>
+                <th>Utilizador</th>
+                <th>Destino</th>
+                <th>Partida</th>
+                <th>Regresso</th>
+                <th>Viajantes</th>
+                <th>Preço est.</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tripsTableBody">
+              <tr class="loading-row"><td colspan="8"><span class="spinner"></span>A carregar…</td></tr>
+            </tbody>
+          </table>
+          <div class="tbl-pagination">
+            <span class="tbl-pagination-info" id="tripsPagInfo"></span>
+            <div class="tbl-page-btns" id="tripsPagBtns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FAVORITOS ───────────────────────────────────── -->
+      <div class="admin-section" id="sec-favorites">
+        <div class="section-hd">
+          <h2>Favoritos por destino</h2>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Destino</th>
+                <th>Total de favoritos</th>
+                <th>Popularidade</th>
+              </tr>
+            </thead>
+            <tbody id="favsTableBody">
+              <tr class="loading-row"><td colspan="3"><span class="spinner"></span>A carregar…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-layout -->
+
+<script>
+// ── Destinos (espelho do script.js) ───────────────────────────
+const DESTINATIONS = [
+  { id:1,  name:'Quedas de Kalandula' },
+  { id:2,  name:'Ilha do Mussulo' },
+  { id:3,  name:'Miradouro da Lua' },
+  { id:4,  name:'Fenda da Tundavala' },
+  { id:5,  name:'Parque Nacional da Kissama' },
+  { id:6,  name:'Cabo Ledo' },
+  { id:7,  name:'Serra da Leba' },
+  { id:8,  name:'Pedras Negras de Pungo Andongo' },
+  { id:9,  name:'Parque Nacional do Iona' },
+  { id:10, name:'Fortaleza de São Miguel' },
+  { id:11, name:'Baía Azul' },
+  { id:12, name:'Cristo Rei do Lubango' },
+];
+function destName(id) {
+  return DESTINATIONS.find(d => d.id == id)?.name || 'Destino #' + id;
+}
+
+// ── Auth guard ────────────────────────────────────────────────
+(function() {
+  const user = JSON.parse(localStorage.getItem('wl_user') || 'null');
+  if (!user) { location.href = 'login.html'; return; }
+  if (user.role !== 'admin') { location.href = 'dashboard.html'; return; }
+  document.getElementById('adminName').textContent = user.name?.split(' ')[0] || 'Admin';
+  document.getElementById('adminAvatar').textContent = (user.name?.[0] || 'A').toUpperCase();
+})();
+
+// ── State ─────────────────────────────────────────────────────
+let allUsers  = [];
+let allTrips  = [];
+let allFavs   = [];
+let usersPage = 1;
+let tripsPage = 1;
+const PER_PAGE = 10;
+
+// ── Toast ─────────────────────────────────────────────────────
+function toast(msg, type = '') {
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  requestAnimationFrame(() => { requestAnimationFrame(() => t.classList.add('show')); });
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3200);
+}
+
+// ── Confirm ───────────────────────────────────────────────────
+let confirmCb = null;
+function confirm(title, msg, cb) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent   = msg;
+  confirmCb = cb;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  confirmCb = null;
+}
+document.getElementById('confirmBtn').addEventListener('click', () => {
+  if (confirmCb) confirmCb();
+  closeConfirm();
+});
+
+// ── Modal helpers ─────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── Section switch ────────────────────────────────────────────
+const sectionTitles = {
+  overview:'Visão Geral', users:'Utilizadores',
+  trips:'Viagens', favorites:'Favoritos'
+};
+function switchSection(name, el) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('topbarTitle').textContent = sectionTitles[name] || name;
+
+  if (name === 'users'     && !allUsers.length)  loadUsers();
+  if (name === 'trips'     && !allTrips.length)  loadTrips();
+  if (name === 'favorites' && !allFavs.length)   loadFavorites();
+  if (name === 'overview')                       loadOverview();
+  return false;
+}
+
+// ── API helper ────────────────────────────────────────────────
+async function api(url, method = 'GET', body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res  = await fetch(url, opts);
+  return res.json();
+}
+
+// ── Format date ───────────────────────────────────────────────
+function fmtDate(str) {
+  if (!str) return '—';
+  const d = new Date(str);
+  return d.toLocaleDateString('pt-AO', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  VISÃO GERAL
+// ═══════════════════════════════════════════════════════════════
+async function loadOverview() {
+  try {
+    const data = await api('api/admin.php?action=overview');
+    if (!data.success) { toast('Erro ao carregar overview', 'error'); return; }
+    const s = data.stats;
+    document.getElementById('kpi-users').textContent = s.total_users ?? '—';
+    document.getElementById('kpi-trips').textContent = s.total_trips ?? '—';
+    document.getElementById('kpi-favs').textContent  = s.total_favs  ?? '—';
+    document.getElementById('kpi-new').textContent   = s.new_users   ?? '—';
+
+    // Últimos utilizadores
+    const ul = document.getElementById('recentUsers');
+    ul.innerHTML = '';
+    (data.recent_users || []).forEach(u => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="dl-key">${u.name}</span><span class="dl-val" style="color:var(--gray-400);font-weight:300;font-size:.72rem">${fmtDate(u.created_at)}</span>`;
+      ul.appendChild(li);
+    });
+
+    // Últimas viagens
+    const tl = document.getElementById('recentTrips');
+    tl.innerHTML = '';
+    (data.recent_trips || []).forEach(t => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="dl-key">${t.destination_name}</span><span class="dl-val" style="color:var(--gray-400);font-weight:300;font-size:.72rem">${t.reference}</span>`;
+      tl.appendChild(li);
+    });
+  } catch { toast('Erro de ligação', 'error'); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  UTILIZADORES
+// ═══════════════════════════════════════════════════════════════
+async function loadUsers() {
+  document.getElementById('usersTableBody').innerHTML =
+    '<tr class="loading-row"><td colspan="7"><span class="spinner"></span>A carregar…</td></tr>';
+  try {
+    const data = await api('api/admin.php?action=users');
+    allUsers = data.users || [];
+    renderUsers();
+  } catch { toast('Erro ao carregar utilizadores', 'error'); }
+}
+
+function filterUsers() {
+  usersPage = 1;
+  renderUsers();
+}
+
+function renderUsers() {
+  const q    = (document.getElementById('userSearch')?.value || '').toLowerCase();
+  const role = document.getElementById('userRoleFilter')?.value || '';
+  let rows   = allUsers.filter(u => {
+    const matchQ = !q || u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q);
+    const matchR = !role || u.role === role;
+    return matchQ && matchR;
+  });
+
+  const total = rows.length;
+  const start = (usersPage - 1) * PER_PAGE;
+  const page  = rows.slice(start, start + PER_PAGE);
+
+  const tbody = document.getElementById('usersTableBody');
+  if (!page.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="tbl-empty">Nenhum utilizador encontrado.</td></tr>';
+  } else {
+    tbody.innerHTML = page.map(u => `
+      <tr>
+        <td style="color:var(--gray-400);font-size:.72rem">#${u.id}</td>
+        <td style="font-weight:500">${esc(u.name)}</td>
+        <td style="color:var(--gray-600)">${esc(u.email)}</td>
+        <td>${esc(u.location || '—')}</td>
+        <td>${u.role === 'admin'
+          ? '<span class="badge badge-amber">Admin</span>'
+          : '<span class="badge badge-blue">Utilizador</span>'}</td>
+        <td style="color:var(--gray-400);font-size:.76rem">${fmtDate(u.created_at)}</td>
+        <td>
+          <div class="tbl-actions">
+            <button class="tbl-btn tbl-btn-view" onclick="showUserDetail(${u.id})">Ver</button>
+            <button class="tbl-btn tbl-btn-warn" onclick="editUser(${u.id})">Editar</button>
+            <button class="tbl-btn tbl-btn-danger" onclick="deleteUser(${u.id},'${esc(u.name)}')">Apagar</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  // Pagination
+  document.getElementById('usersPagInfo').textContent =
+    `${total} utilizador${total !== 1 ? 'es' : ''}`;
+  renderPag('usersPagBtns', Math.ceil(total / PER_PAGE), usersPage, p => { usersPage = p; renderUsers(); });
+}
+
+function showUserDetail(id) {
+  const u = allUsers.find(x => x.id == id);
+  if (!u) return;
+  const list = document.getElementById('userDetailList');
+  list.innerHTML = [
+    ['ID', '#' + u.id],
+    ['Nome', u.name],
+    ['Email', u.email],
+    ['Localização', u.location || '—'],
+    ['Papel', u.role === 'admin' ? 'Administrador' : 'Utilizador'],
+    ['Registado em', fmtDate(u.created_at)],
+  ].map(([k,v]) => `<li><span class="dl-key">${k}</span><span class="dl-val">${esc(String(v))}</span></li>`).join('');
+  openModal('userModal');
+}
+
+function editUser(id) {
+  const u = allUsers.find(x => x.id == id);
+  if (!u) return;
+  document.getElementById('editUserId').value       = u.id;
+  document.getElementById('editUserName').value     = u.name;
+  document.getElementById('editUserEmail').value    = u.email;
+  document.getElementById('editUserLocation').value = u.location || '';
+  document.getElementById('editUserRole').value     = u.role || 'user';
+  openModal('editUserModal');
+}
+
+async function saveUser() {
+  const id       = document.getElementById('editUserId').value;
+  const name     = document.getElementById('editUserName').value.trim();
+  const email    = document.getElementById('editUserEmail').value.trim();
+  const location = document.getElementById('editUserLocation').value.trim();
+  const role     = document.getElementById('editUserRole').value;
+  if (!name || !email) { toast('Nome e email são obrigatórios', 'error'); return; }
+
+  try {
+    const data = await api('api/admin.php?action=update_user', 'POST', { id, name, email, location, role });
+    if (data.success) {
+      toast('Utilizador atualizado.', 'success');
+      closeModal('editUserModal');
+      const idx = allUsers.findIndex(u => u.id == id);
+      if (idx !== -1) { allUsers[idx] = { ...allUsers[idx], name, email, location, role }; renderUsers(); }
+    } else { toast(data.message || 'Erro ao guardar.', 'error'); }
+  } catch { toast('Erro de ligação.', 'error'); }
+}
+
+function deleteUser(id, name) {
+  confirm('Apagar utilizador', `Tem a certeza que quer apagar "${name}"? Todos os dados serão removidos.`, async () => {
+    try {
+      const data = await api('api/admin.php?action=delete_user', 'POST', { id });
+      if (data.success) {
+        toast('Utilizador apagado.', 'success');
+        allUsers = allUsers.filter(u => u.id != id);
+        renderUsers();
+      } else { toast(data.message || 'Erro ao apagar.', 'error'); }
+    } catch { toast('Erro de ligação.', 'error'); }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  VIAGENS
+// ═══════════════════════════════════════════════════════════════
+async function loadTrips() {
+  document.getElementById('tripsTableBody').innerHTML =
+    '<tr class="loading-row"><td colspan="8"><span class="spinner"></span>A carregar…</td></tr>';
+  try {
+    const data = await api('api/admin.php?action=trips');
+    allTrips = data.trips || [];
+    renderTrips();
+  } catch { toast('Erro ao carregar viagens', 'error'); }
+}
+
+function filterTrips() { tripsPage = 1; renderTrips(); }
+
+function renderTrips() {
+  const q      = (document.getElementById('tripSearch')?.value || '').toLowerCase();
+  const status = document.getElementById('tripStatusFilter')?.value || '';
+  const today  = new Date().toISOString().split('T')[0];
+
+  let rows = allTrips.filter(t => {
+    const matchQ = !q || t.destination_name.toLowerCase().includes(q) || t.reference.toLowerCase().includes(q);
+    const matchS = !status ||
+      (status === 'upcoming' && t.date_from >= today) ||
+      (status === 'past'     && t.date_to   <  today);
+    return matchQ && matchS;
+  });
+
+  const total = rows.length;
+  const start = (tripsPage - 1) * PER_PAGE;
+  const page  = rows.slice(start, start + PER_PAGE);
+
+  const tbody = document.getElementById('tripsTableBody');
+  if (!page.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="tbl-empty">Nenhuma viagem encontrada.</td></tr>';
+  } else {
+    tbody.innerHTML = page.map(t => {
+      const isUpcoming = t.date_from >= today;
+      const travelers  = t.adults + (t.children || 0);
+      return `
+      <tr>
+        <td><span class="badge badge-blue" style="font-family:monospace">${esc(t.reference)}</span></td>
+        <td style="font-weight:500">${esc(t.user_name || 'ID #' + t.user_id)}</td>
+        <td>${esc(t.destination_name)}</td>
+        <td style="font-size:.76rem">${fmtDate(t.date_from)}</td>
+        <td style="font-size:.76rem">${fmtDate(t.date_to)}</td>
+        <td style="color:var(--gray-600)">${travelers} pax</td>
+        <td style="font-weight:500;font-size:.78rem">${esc(t.estimated_price || '—')}</td>
+        <td>
+          <div class="tbl-actions">
+            <button class="tbl-btn tbl-btn-view" onclick="showTripDetail(${t.id})">Ver</button>
+            <button class="tbl-btn tbl-btn-danger" onclick="deleteTrip(${t.id},'${esc(t.reference)}')">Apagar</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('tripsPagInfo').textContent = `${total} viagen${total !== 1 ? 's' : ''}`;
+  renderPag('tripsPagBtns', Math.ceil(total / PER_PAGE), tripsPage, p => { tripsPage = p; renderTrips(); });
+}
+
+function showTripDetail(id) {
+  const t = allTrips.find(x => x.id == id);
+  if (!t) return;
+  const services = Array.isArray(t.services) ? t.services.join(', ') : (t.services || '—');
+  const list = document.getElementById('tripDetailList');
+  list.innerHTML = [
+    ['Referência',    t.reference],
+    ['Utilizador',    t.user_name || 'ID #' + t.user_id],
+    ['Destino',       t.destination_name],
+    ['Partida',       fmtDate(t.date_from)],
+    ['Regresso',      fmtDate(t.date_to)],
+    ['Adultos',       t.adults],
+    ['Crianças',      t.children || 0],
+    ['Serviços',      services],
+    ['Alojamento',    t.accommodation_type || '—'],
+    ['Actividade',    t.activity_level || '—'],
+    ['Preço est.',    t.estimated_price || '—'],
+    ['Notas',         t.notes || '—'],
+    ['Criado em',     fmtDate(t.created_at)],
+  ].map(([k,v]) => `<li><span class="dl-key">${k}</span><span class="dl-val">${esc(String(v))}</span></li>`).join('');
+  openModal('tripModal');
+}
+
+function deleteTrip(id, ref) {
+  confirm('Apagar viagem', `Apagar o planeamento "${ref}"?`, async () => {
+    try {
+      const data = await api('api/admin.php?action=delete_trip', 'POST', { id });
+      if (data.success) {
+        toast('Viagem apagada.', 'success');
+        allTrips = allTrips.filter(t => t.id != id);
+        renderTrips();
+      } else { toast(data.message || 'Erro ao apagar.', 'error'); }
+    } catch { toast('Erro de ligação.', 'error'); }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  FAVORITOS
+// ═══════════════════════════════════════════════════════════════
+async function loadFavorites() {
+  document.getElementById('favsTableBody').innerHTML =
+    '<tr class="loading-row"><td colspan="3"><span class="spinner"></span>A carregar…</td></tr>';
+  try {
+    const data = await api('api/admin.php?action=favorites_stats');
+    allFavs = data.stats || [];
+    renderFavorites();
+  } catch { toast('Erro ao carregar favoritos', 'error'); }
+}
+
+function renderFavorites() {
+  const tbody  = document.getElementById('favsTableBody');
+  if (!allFavs.length) {
+    tbody.innerHTML = '<tr><td colspan="3" class="tbl-empty">Sem dados de favoritos.</td></tr>';
+    return;
+  }
+  const max = Math.max(...allFavs.map(f => f.total), 1);
+  tbody.innerHTML = allFavs.map(f => {
+    const pct = Math.round((f.total / max) * 100);
+    return `
+    <tr>
+      <td style="font-weight:500">${esc(destName(f.destination_id))}</td>
+      <td style="font-weight:600;color:var(--terracota)">${f.total}</td>
+      <td style="min-width:160px">
+        <div style="background:var(--gray-200);border-radius:4px;height:8px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:var(--terracota);border-radius:4px;transition:width .4s"></div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Pagination ─────────────────────────────────────────────────
+function renderPag(containerId, totalPages, current, onPage) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  if (totalPages <= 1) { wrap.innerHTML = ''; return; }
+  let html = `<button class="page-btn" ${current <= 1 ? 'disabled' : ''} onclick="(${onPage.toString()})(${current - 1})">‹</button>`;
+  for (let p = 1; p <= totalPages; p++) {
+    if (p === 1 || p === totalPages || Math.abs(p - current) <= 1)
+      html += `<button class="page-btn ${p === current ? 'active' : ''}" onclick="(${onPage.toString()})(${p})">${p}</button>`;
+    else if (Math.abs(p - current) === 2)
+      html += `<button class="page-btn" disabled>…</button>`;
+  }
+  html += `<button class="page-btn" ${current >= totalPages ? 'disabled' : ''} onclick="(${onPage.toString()})(${current + 1})">›</button>`;
+  wrap.innerHTML = html;
+}
+
+// ── Escape HTML ────────────────────────────────────────────────
+function esc(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ───────────────────────────────────────────────────────
+loadOverview();
+</script>
+</body>
+</html>

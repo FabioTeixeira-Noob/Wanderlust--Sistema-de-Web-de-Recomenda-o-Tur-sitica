@@ -197,7 +197,7 @@ const DESTINATIONS = [
 ];
 
 
-let favorites = JSON.parse(localStorage.getItem('wl_favorites') || '[]');
+let favorites = []; // carregado via API
 let currentFilter = 'todos';
 let activeModalId = null;
 
@@ -376,7 +376,16 @@ function toggleFavorite(id, btn) {
     btn.classList.remove('active');
     showToast('Removido dos favoritos.', '');
   }
-  localStorage.setItem('wl_favorites', JSON.stringify(favorites));
+  // Sincronizar favorito com o servidor
+  const _user = getCurrentUser();
+  if (_user?.id) {
+    const isFav = favorites.includes(id);
+    fetch('api/favorites.php', {
+      method: isFav ? 'POST' : 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: _user.id, destination_id: id })
+    }).catch(() => {}); // silencioso
+  }
   renderFavorites();
 
   const statEl = document.getElementById('stat-favorites');
@@ -539,7 +548,7 @@ function initLoginForm() {
         setUser(data.user);
         showToast('Sessão iniciada com sucesso.', 'success');
         setTimeout(() => {
-          window.location.href = localStorage.getItem('wl_preferences') ? 'dashboard.html' : 'preferences.html';
+          window.location.href = data.user.role === 'admin' ? 'admin.html' : (localStorage.getItem('wl_preferences') ? 'dashboard.html' : 'preferences.html');
         }, 800);
       } else {
         setFieldError(passEl, data.message || 'Email ou senha incorretos.');
@@ -632,11 +641,20 @@ function initPreferencesForm() {
       climate:  form.querySelector('input[name="climate"]:checked')?.value  || 'tropical',
       distance: form.querySelector('#distance')?.value || '12'
     };
-    localStorage.setItem('wl_preferences', JSON.stringify(prefs));
-
     const btn = form.querySelector('[type="submit"]');
     btn.textContent = 'A guardar...';
     btn.disabled = true;
+
+    const _user = getCurrentUser();
+    if (_user?.id) {
+      fetch('api/preferences.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: _user.id, ...prefs })
+      }).catch(() => {});
+    }
+    // Guardar também no localStorage como cache local
+    localStorage.setItem('wl_preferences', JSON.stringify(prefs));
 
     showToast('Preferências guardadas. A gerar recomendações...', 'success');
     setTimeout(() => window.location.href = 'dashboard.html', 1100);
@@ -650,25 +668,14 @@ function initDashboard() {
   const user = getCurrentUser();
   if (!user) { window.location.href = 'login.html'; return; }
 
+  const userId    = user.id;
   const firstName = user.name?.split(' ')[0] || 'Viajante';
   const initial   = (user.name?.[0] || 'V').toUpperCase();
 
   document.querySelectorAll('.user-name').forEach(el => el.textContent = firstName);
   document.querySelectorAll('.user-avatar-letter').forEach(el => el.textContent = initial);
 
-  // Recomendados
-  const recGrid = document.getElementById('recommended-grid');
-  if (recGrid) {
-    const prefs = JSON.parse(localStorage.getItem('wl_preferences') || '{}');
-    let dests = [...DESTINATIONS];
-    if (prefs.categories?.length) {
-      dests = dests.filter(d => d.category.some(c => prefs.categories.includes(c)));
-    }
-    if (!dests.length) dests = DESTINATIONS.slice(0, 4);
-    dests.slice(0, 4).forEach(d => recGrid.appendChild(createDestCard(d, true)));
-  }
-
-  // Populares
+  // Populares (não depende de preferências)
   const popGrid = document.getElementById('popular-grid');
   if (popGrid) {
     [...DESTINATIONS].sort((a, b) => b.rating - a.rating)
@@ -676,12 +683,57 @@ function initDashboard() {
       .forEach(d => popGrid.appendChild(createDestCard(d)));
   }
 
-  renderFavorites();
+  // Carregar dados do servidor em paralelo
+  Promise.all([
+    fetch('api/favorites.php?user_id=' + userId).then(r => r.json()),
+    fetch('api/preferences.php?user_id=' + userId).then(r => r.json()),
+    fetch('api/dashboard.php?user_id=' + userId).then(r => r.json()),
+  ]).then(([favData, prefData, statsData]) => {
 
-  const statFav = document.getElementById('stat-favorites');
-  if (statFav) statFav.textContent = favorites.length;
+    // ── Favoritos ──────────────────────────────────────────
+    if (favData.success) {
+      favorites = favData.favorites;
+    }
 
-  observeReveal();
+    // ── Recomendados (filtrados pelas preferências da BD) ───
+    const recGrid = document.getElementById('recommended-grid');
+    if (recGrid) {
+      const prefs = prefData.preferences || {};
+      let dests = [...DESTINATIONS];
+      if (prefs.categories?.length) {
+        dests = dests.filter(d => d.category.some(c => prefs.categories.includes(c)));
+      }
+      if (!dests.length) dests = DESTINATIONS.slice(0, 4);
+      dests.slice(0, 4).forEach(d => recGrid.appendChild(createDestCard(d, true)));
+    }
+
+    // ── Estatísticas ────────────────────────────────────────
+    if (statsData.success) {
+      const s = statsData.stats;
+      const statFav   = document.getElementById('stat-favorites');
+      const statComp  = document.getElementById('stat-compatibility');
+      if (statFav)  statFav.textContent  = s.favorites;
+      if (statComp) statComp.textContent = s.compatibility + '%';
+    }
+
+    renderFavorites();
+    observeReveal();
+
+  }).catch(() => {
+    // Fallback: usar localStorage se a API falhar
+    const prefs = JSON.parse(localStorage.getItem('wl_preferences') || '{}');
+    const recGrid = document.getElementById('recommended-grid');
+    if (recGrid) {
+      let dests = [...DESTINATIONS];
+      if (prefs.categories?.length) {
+        dests = dests.filter(d => d.category.some(c => prefs.categories.includes(c)));
+      }
+      if (!dests.length) dests = DESTINATIONS.slice(0, 4);
+      dests.slice(0, 4).forEach(d => recGrid.appendChild(createDestCard(d, true)));
+    }
+    renderFavorites();
+    observeReveal();
+  });
 }
 
 /* ══════════════════════════════

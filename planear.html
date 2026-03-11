@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planear Viagem — Wanderlust</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Layout ───────────────────────────────────────────── */
+    .plan-page {
+      min-height: 100vh;
+      background: var(--gray-100);
+      padding-top: 70px;
+    }
+
+    /* ── Hero banner ──────────────────────────────────────── */
+    .plan-hero {
+      background: var(--petrol);
+      padding: 52px 40px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .plan-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(196,98,58,.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .plan-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .plan-hero-dest {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .plan-hero-dest img {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,.15);
+    }
+    .plan-hero-dest-info span {
+      font-size: .68rem;
+      color: var(--terracota);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 500;
+    }
+    .plan-hero-dest-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem;
+      color: var(--white);
+      font-weight: 500;
+      margin: 2px 0 0;
+    }
+    .plan-hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .plan-hero-badge {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.65);
+      font-size: .68rem;
+      padding: 5px 12px;
+      border-radius: 20px;
+      letter-spacing: .05em;
+    }
+
+    /* ── Grid principal ───────────────────────────────────── */
+    .plan-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 760px) {
+      .plan-body { grid-template-columns: 1fr; }
+      .plan-hero { padding: 36px 20px 28px; }
+    }
+
+    /* ── Cards do formulário ──────────────────────────────── */
+    .plan-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px 28px 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+    .plan-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .plan-card .card-sub {
+      font-size: .78rem;
+      color: var(--gray-600);
+      margin-bottom: 22px;
+      font-weight: 300;
+    }
+
+    /* ── Form controls ────────────────────────────────────── */
+    .plan-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .plan-form-group {
+      margin-bottom: 16px;
+    }
+    .plan-form-group label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 500;
+      color: var(--gray-800);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .plan-form-group input,
+    .plan-form-group select,
+    .plan-form-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: .85rem;
+      color: var(--ink);
+      font-family: inherit;
+      background: var(--white);
+      transition: border-color .2s;
+      box-sizing: border-box;
+    }
+    .plan-form-group input:focus,
+    .plan-form-group select:focus,
+    .plan-form-group textarea:focus {
+      outline: none;
+      border-color: var(--petrol);
+    }
+    .plan-form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* ── Participantes counter ────────────────────────────── */
+    .counter-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+    }
+    .counter-label { font-size: .84rem; color: var(--ink); }
+    .counter-label small { display: block; font-size: .7rem; color: var(--gray-600); font-weight: 300; }
+    .counter-controls { display: flex; align-items: center; gap: 14px; }
+    .counter-btn {
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 50%;
+      background: var(--white);
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .counter-btn:hover { border-color: var(--petrol); color: var(--petrol); }
+    .counter-val { font-size: 1rem; font-weight: 500; min-width: 20px; text-align: center; }
+
+    /* ── Serviços checkbox ────────────────────────────────── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .service-item input { display: none; }
+    .service-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: .82rem;
+      color: var(--gray-800);
+      transition: all .2s;
+    }
+    .service-item input:checked + .service-label {
+      border-color: var(--petrol);
+      background: rgba(26,58,74,.05);
+      color: var(--petrol);
+    }
+    .service-icon {
+      width: 30px; height: 30px;
+      background: var(--gray-100);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem;
+      flex-shrink: 0;
+    }
+    .service-item input:checked + .service-label .service-icon {
+      background: var(--petrol);
+    }
+
+    /* ── Sidebar resumo ───────────────────────────────────── */
+    .plan-summary {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 86px;
+    }
+    .plan-summary h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: .8rem;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+    .summary-row .s-label { color: var(--gray-600); font-weight: 300; flex-shrink: 0; }
+    .summary-row .s-val { color: var(--ink); font-weight: 500; text-align: right; }
+    .summary-divider {
+      height: 1px; background: var(--gray-200);
+      margin: 16px 0;
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .summary-total .t-label { font-size: .78rem; color: var(--gray-600); }
+    .summary-total .t-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .summary-note {
+      font-size: .68rem;
+      color: var(--gray-400);
+      margin-top: 6px;
+      text-align: right;
+      font-weight: 300;
+    }
+    .btn-plan {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      font-size: .82rem;
+    }
+
+    /* ── Estado de confirmação ────────────────────────────── */
+    .plan-success {
+      display: none;
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .plan-success.show { display: block; }
+    .plan-success-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, var(--petrol), var(--petrol-mid));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 16px;
+    }
+    .plan-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+    .plan-success p {
+      font-size: .82rem;
+      color: var(--gray-600);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .plan-success .ref-code {
+      display: inline-block;
+      background: var(--gray-100);
+      border: 1px dashed var(--gray-400);
+      padding: 8px 20px;
+      border-radius: var(--radius);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      font-weight: 500;
+      color: var(--petrol);
+      margin: 14px 0;
+    }
+
+    /* ── Loading overlay ──────────────────────────────────── */
+    .plan-loading {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,28,30,.5);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .plan-loading.show { display: flex; }
+    .plan-loading-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 40px 48px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+    .plan-loading-spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--terracota);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .plan-loading-box p { font-size: .85rem; color: var(--gray-600); font-weight: 300; }
+
+    /* ── Erro de campo ────────────────────────────────────── */
+    .field-error {
+      font-size: .72rem;
+      color: #e53e3e;
+      margin-top: 4px;
+      display: none;
+    }
+    .field-error.show { display: block; }
+    .plan-form-group input.error,
+    .plan-form-group select.error {
+      border-color: #e53e3e;
+    }
+  </style>
+</head>
+<body data-page="planear">
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 16 16"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"/></svg>
+        </div>
+        <span class="logo-wordmark">Wander<span>lust</span></span>
+      </a>
+      <a href="dashboard.html" class="btn btn-ghost btn-sm">← Voltar</a>
+    </div>
+  </nav>
+
+  <!-- Hero com destino -->
+  <div class="plan-page">
+    <div class="plan-hero">
+      <div class="plan-hero-inner">
+        <div class="plan-hero-dest">
+          <img id="hero-img" src="" alt="">
+          <div class="plan-hero-dest-info">
+            <span>A planear viagem para</span>
+            <h2 id="hero-name">Destino</h2>
+          </div>
+        </div>
+        <div class="plan-hero-badges" id="hero-badges"></div>
+      </div>
+    </div>
+
+    <div class="plan-body">
+      <!-- Coluna principal -->
+      <div class="plan-main">
+
+        <!-- Datas e participantes -->
+        <div class="plan-card">
+          <h3>Datas e participantes</h3>
+          <p class="card-sub">Defina quando e com quem vai viajar.</p>
+
+          <div class="plan-form-row">
+            <div class="plan-form-group">
+              <label>Data de partida</label>
+              <input type="date" id="date-from" min="">
+              <div class="field-error" id="err-date-from">Selecione a data de partida.</div>
+            </div>
+            <div class="plan-form-group">
+              <label>Data de regresso</label>
+              <input type="date" id="date-to" min="">
+              <div class="field-error" id="err-date-to">Selecione uma data de regresso válida.</div>
+            </div>
+          </div>
+
+          <div class="counter-group">
+            <div class="counter-label">
+              Adultos
+              <small>Maiores de 12 anos</small>
+            </div>
+            <div class="counter-controls">
+              <button class="counter-btn" onclick="changeCount('adults', -1)">−</button>
+              <span class="counter-val" id="adults-val">2</span>
+              <button class="counter-btn" onclick="changeCount('adults', 1)">+</button>
+            </div>
+          </div>
+
+          <div class="counter-group">
+            <div class="counter-label">
+              Crianças
+              <small>Dos 2 aos 12 anos</small>
+            </div>
+            <div class="counter-controls">
+              <button class="counter-btn" onclick="changeCount('children', -1)">−</button>
+              <span class="counter-val" id="children-val">0</span>
+              <button class="counter-btn" onclick="changeCount('children', 1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Serviços -->
+        <div class="plan-card">
+          <h3>O que pretende incluir?</h3>
+          <p class="card-sub">Selecione os serviços que quer na sua viagem.</p>
+
+          <div class="services-grid">
+            <div class="service-item">
+              <input type="checkbox" id="svc-transport" value="transporte">
+              <label class="service-label" for="svc-transport">
+                <span class="service-icon">✈️</span>
+                Transporte
+              </label>
+            </div>
+            <div class="service-item">
+              <input type="checkbox" id="svc-hotel" value="alojamento" checked>
+              <label class="service-label" for="svc-hotel">
+                <span class="service-icon">🏨</span>
+                Alojamento
+              </label>
+            </div>
+            <div class="service-item">
+              <input type="checkbox" id="svc-guide" value="guia">
+              <label class="service-label" for="svc-guide">
+                <span class="service-icon">🧭</span>
+                Guia turístico
+              </label>
+            </div>
+            <div class="service-item">
+              <input type="checkbox" id="svc-food" value="refeições">
+              <label class="service-label" for="svc-food">
+                <span class="service-icon">🍽️</span>
+                Refeições
+              </label>
+            </div>
+            <div class="service-item">
+              <input type="checkbox" id="svc-activities" value="atividades">
+              <label class="service-label" for="svc-activities">
+                <span class="service-icon">🎯</span>
+                Atividades
+              </label>
+            </div>
+            <div class="service-item">
+              <input type="checkbox" id="svc-insurance" value="seguro">
+              <label class="service-label" for="svc-insurance">
+                <span class="service-icon">🛡️</span>
+                Seguro viagem
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preferências adicionais -->
+        <div class="plan-card">
+          <h3>Preferências adicionais</h3>
+          <p class="card-sub">Ajude-nos a personalizar ainda mais a sua experiência.</p>
+
+          <div class="plan-form-group">
+            <label>Tipo de alojamento preferido</label>
+            <select id="accommodation-type">
+              <option value="">Sem preferência</option>
+              <option value="hotel">Hotel</option>
+              <option value="resort">Resort</option>
+              <option value="eco-lodge">Eco-lodge / Acampamento</option>
+              <option value="pousada">Pousada local</option>
+            </select>
+          </div>
+
+          <div class="plan-form-group">
+            <label>Nível de actividade física</label>
+            <select id="activity-level">
+              <option value="baixo">Baixo — passeios tranquilos</option>
+              <option value="moderado" selected>Moderado — caminhadas leves</option>
+              <option value="alto">Alto — trilhos e aventura</option>
+            </select>
+          </div>
+
+          <div class="plan-form-group">
+            <label>Notas especiais / Pedidos</label>
+            <textarea id="notes" placeholder="Ex: aniversário, necessidades especiais, dieta, etc."></textarea>
+          </div>
+        </div>
+
+      </div><!-- /plan-main -->
+
+      <!-- Sidebar resumo -->
+      <div>
+        <div class="plan-summary" id="summary-box">
+          <h3>Resumo da viagem</h3>
+
+          <div class="summary-row">
+            <span class="s-label">Destino</span>
+            <span class="s-val" id="sum-dest">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="s-label">Duração</span>
+            <span class="s-val" id="sum-duration">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="s-label">Viajantes</span>
+            <span class="s-val" id="sum-travelers">2 adultos</span>
+          </div>
+          <div class="summary-row">
+            <span class="s-label">Serviços</span>
+            <span class="s-val" id="sum-services">Alojamento</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-total">
+            <span class="t-label">Estimativa total</span>
+            <span class="t-val" id="sum-price">—</span>
+          </div>
+          <div class="summary-note">* Valor estimado. Preço final confirmado por contacto.</div>
+
+          <button class="btn btn-primary btn-plan" id="btn-submit">
+            Confirmar planeamento
+          </button>
+          <button class="btn btn-ghost btn-plan" style="margin-top:10px" onclick="history.back()">
+            Cancelar
+          </button>
+        </div>
+
+        <!-- Estado de sucesso (substitui o resumo) -->
+        <div class="plan-summary plan-success" id="success-box">
+          <div class="plan-success-icon">✓</div>
+          <h3>Viagem planeada!</h3>
+          <p>O seu planeamento foi guardado. Entraremos em contacto em breve para confirmar os detalhes.</p>
+          <div class="ref-code" id="ref-code">WL-000000</div>
+          <a href="dashboard.html" class="btn btn-primary" style="width:100%;display:block;text-align:center;margin-top:4px">
+            Voltar ao dashboard
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /plan-body -->
+  </div><!-- /plan-page -->
+
+  <!-- Loading overlay -->
+  <div class="plan-loading" id="plan-loading">
+    <div class="plan-loading-box">
+      <div class="plan-loading-spinner"></div>
+      <p>A guardar o seu planeamento…</p>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+  // ── Dados e estado ────────────────────────────────────────
+  const urlParams  = new URLSearchParams(location.search);
+  const destId     = parseInt(urlParams.get('dest') || '1');
+  const dest       = DESTINATIONS.find(d => d.id === destId) || DESTINATIONS[0];
+
+  let adults   = 2;
+  let children = 0;
+
+  // ── Preencher hero ────────────────────────────────────────
+  document.getElementById('hero-img').src  = dest.image;
+  document.getElementById('hero-name').textContent = dest.name;
+  document.getElementById('sum-dest').textContent  = dest.name;
+
+  const badges = [dest.location, dest.climate, dest.badge];
+  document.getElementById('hero-badges').innerHTML =
+    badges.map(b => `<span class="plan-hero-badge">${b}</span>`).join('');
+
+  // ── Data mínima = hoje ────────────────────────────────────
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date-from').min = today;
+  document.getElementById('date-to').min   = today;
+
+  document.getElementById('date-from').addEventListener('change', () => {
+    const from = document.getElementById('date-from').value;
+    document.getElementById('date-to').min = from || today;
+    updateSummary();
+  });
+  document.getElementById('date-to').addEventListener('change', updateSummary);
+
+  // ── Contadores ────────────────────────────────────────────
+  function changeCount(type, delta) {
+    if (type === 'adults') {
+      adults = Math.max(1, adults + delta);
+      document.getElementById('adults-val').textContent = adults;
+    } else {
+      children = Math.max(0, children + delta);
+      document.getElementById('children-val').textContent = children;
+    }
+    updateSummary();
+  }
+
+  // ── Atualizar resumo ──────────────────────────────────────
+  document.querySelectorAll('.service-item input').forEach(cb =>
+    cb.addEventListener('change', updateSummary)
+  );
+
+  function getDays() {
+    const from = document.getElementById('date-from').value;
+    const to   = document.getElementById('date-to').value;
+    if (!from || !to) return null;
+    const diff = (new Date(to) - new Date(from)) / 86400000;
+    return diff > 0 ? diff : null;
+  }
+
+  function getSelectedServices() {
+    return [...document.querySelectorAll('.service-item input:checked')]
+      .map(cb => cb.nextElementSibling.querySelector('span:last-child').textContent.trim());
+  }
+
+  function updateSummary() {
+    const days     = getDays();
+    const total    = adults + children;
+    const services = getSelectedServices();
+
+    // Duração
+    document.getElementById('sum-duration').textContent =
+      days ? days + (days === 1 ? ' noite' : ' noites') : '—';
+
+    // Viajantes
+    const travelersText = adults + ' adult' + (adults > 1 ? 'os' : 'o') +
+      (children ? ' · ' + children + ' criança' + (children > 1 ? 's' : '') : '');
+    document.getElementById('sum-travelers').textContent = travelersText;
+
+    // Serviços
+    document.getElementById('sum-services').textContent =
+      services.length ? services.join(', ') : 'Nenhum';
+
+    // Preço estimado
+    if (days) {
+      const base     = dest.priceNum;
+      const perNight = base * 0.4;
+      const estimated = Math.round((base + perNight * (days - 1)) * total / 10000) * 10000;
+      document.getElementById('sum-price').textContent =
+        estimated.toLocaleString('pt-AO') + ' Kz';
+    } else {
+      document.getElementById('sum-price').textContent = '—';
+    }
+  }
+
+  updateSummary();
+
+  // ── Validação ─────────────────────────────────────────────
+  function showFieldErr(id, show) {
+    document.getElementById(id).classList.toggle('show', show);
+  }
+  function setErr(inputId, errId, hasErr) {
+    const el = document.getElementById(inputId);
+    el.classList.toggle('error', hasErr);
+    showFieldErr(errId, hasErr);
+  }
+
+  function validate() {
+    let ok = true;
+    const from = document.getElementById('date-from').value;
+    const to   = document.getElementById('date-to').value;
+    if (!from) { setErr('date-from', 'err-date-from', true); ok = false; }
+    else        setErr('date-from', 'err-date-from', false);
+    if (!to || !getDays()) { setErr('date-to', 'err-date-to', true); ok = false; }
+    else                    setErr('date-to', 'err-date-to', false);
+    return ok;
+  }
+
+  // ── Submissão ─────────────────────────────────────────────
+  document.getElementById('btn-submit').addEventListener('click', async () => {
+    if (!validate()) return;
+
+    const user = getCurrentUser();
+    if (!user) { window.location.href = 'login.html'; return; }
+
+    const services = [...document.querySelectorAll('.service-item input:checked')]
+      .map(cb => cb.value);
+
+    const payload = {
+      user_id:            user.id,
+      destination_id:     dest.id,
+      destination_name:   dest.name,
+      date_from:          document.getElementById('date-from').value,
+      date_to:            document.getElementById('date-to').value,
+      adults,
+      children,
+      services,
+      accommodation_type: document.getElementById('accommodation-type').value,
+      activity_level:     document.getElementById('activity-level').value,
+      notes:              document.getElementById('notes').value.trim(),
+      estimated_price:    document.getElementById('sum-price').textContent,
+    };
+
+    document.getElementById('plan-loading').classList.add('show');
+
+    try {
+      const res  = await fetch('api/trips.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      document.getElementById('plan-loading').classList.remove('show');
+
+      if (data.success) {
+        document.getElementById('ref-code').textContent = data.reference;
+        document.getElementById('summary-box').style.display = 'none';
+        document.getElementById('success-box').classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showToast(data.message || 'Erro ao guardar. Tente novamente.', 'error');
+      }
+    } catch {
+      document.getElementById('plan-loading').classList.remove('show');
+      showToast('Erro de ligação. Tente novamente.', 'error');
+    }
+  });
+  </script>
+</body>
+</html>

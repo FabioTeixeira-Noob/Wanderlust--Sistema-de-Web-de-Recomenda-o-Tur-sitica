@@ -29,7 +29,7 @@ if (!$email || !$password) {
 // ── Verificar credenciais ───────────────────────────────────
 try {
     $db   = getDB();
-    $stmt = $db->prepare('SELECT id, name, email, password, location FROM users WHERE email = ? LIMIT 1');
+    $stmt = $db->prepare('SELECT id, name, email, password, location, role FROM users WHERE email = ? LIMIT 1');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
@@ -47,6 +47,7 @@ try {
             'name'     => $user['name'],
             'email'    => $user['email'],
             'location' => $user['location'],
+            'role'     => $user['role'] ?? 'user',
         ],
     ]);
 
