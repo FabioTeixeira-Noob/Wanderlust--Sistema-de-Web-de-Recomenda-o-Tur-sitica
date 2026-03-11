@@ -528,23 +528,30 @@ function initLoginForm() {
     btn.textContent = 'A entrar...';
     btn.disabled = true;
 
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem('wl_users') || '[]');
-      const found = users.find(u => u.email === emailEl.value);
-
-      if (found || emailEl.value === 'demo@wanderlust.com') {
-        const loggedUser = found || { name: 'Utilizador Demo', email: 'demo@wanderlust.com' };
-        setUser(loggedUser);
+    fetch('api/login.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: emailEl.value, password: passEl.value })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        setUser(data.user);
         showToast('Sessão iniciada com sucesso.', 'success');
         setTimeout(() => {
           window.location.href = localStorage.getItem('wl_preferences') ? 'dashboard.html' : 'preferences.html';
         }, 800);
       } else {
-        setFieldError(passEl, 'Email ou senha incorretos. Use: demo@wanderlust.com');
+        setFieldError(passEl, data.message || 'Email ou senha incorretos.');
         btn.textContent = 'Entrar';
         btn.disabled = false;
       }
-    }, 1100);
+    })
+    .catch(() => {
+      setFieldError(passEl, 'Erro de ligação. Tente novamente.');
+      btn.textContent = 'Entrar';
+      btn.disabled = false;
+    });
   });
 }
 
@@ -579,19 +586,34 @@ function initRegisterForm() {
     btn.textContent = 'A criar conta...';
     btn.disabled = true;
 
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem('wl_users') || '[]');
-      const newUser = {
-        name: name.value.trim(),
-        email: email.value,
+    fetch('api/register.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:     name.value.trim(),
+        email:    email.value,
+        password: pass.value,
         location: form.querySelector('#location')?.value || ''
-      };
-      users.push(newUser);
-      localStorage.setItem('wl_users', JSON.stringify(users));
-      setUser(newUser);
-      showToast('Conta criada com sucesso.', 'success');
-      setTimeout(() => window.location.href = 'preferences.html', 850);
-    }, 1100);
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        setUser(data.user);
+        showToast('Conta criada com sucesso.', 'success');
+        setTimeout(() => window.location.href = 'preferences.html', 850);
+      } else {
+        const msg = data.errors?.email || data.message || 'Erro ao criar conta.';
+        showToast(msg, 'error');
+        btn.textContent = 'Criar conta gratuita';
+        btn.disabled = false;
+      }
+    })
+    .catch(() => {
+      showToast('Erro de ligação. Tente novamente.', 'error');
+      btn.textContent = 'Criar conta gratuita';
+      btn.disabled = false;
+    });
   });
 }
 
