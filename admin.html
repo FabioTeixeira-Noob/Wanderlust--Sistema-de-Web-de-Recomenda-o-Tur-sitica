@@ -711,6 +711,86 @@
   </div>
 </div>
 
+<!-- ── Destination Form Modal ──────────────────────────────── -->
+<div class="modal-overlay" id="destModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-head">
+      <h3 id="destModalTitle">Novo destino turístico</h3>
+      <button class="modal-close-btn" onclick="closeModal('destModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="destId">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Nome do destino *</label>
+          <input type="text" id="destName" placeholder="Ex: Quedas de Kalandula">
+        </div>
+        <div class="form-group">
+          <label>Localização *</label>
+          <input type="text" id="destLocation" placeholder="Ex: Malanje · Angola">
+        </div>
+        <div class="form-group">
+          <label>Clima</label>
+          <input type="text" id="destClimate" placeholder="Ex: Tropical / Úmido">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Descrição *</label>
+          <textarea id="destDescription" rows="3" placeholder="Descreva o destino de forma apelativa…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Preço (texto) *</label>
+          <input type="text" id="destPrice" placeholder="Ex: 180.000 – 320.000 Kz">
+        </div>
+        <div class="form-group">
+          <label>Preço médio (número, Kz)</label>
+          <input type="number" id="destPriceNum" placeholder="Ex: 250000" min="0">
+        </div>
+        <div class="form-group">
+          <label>Avaliação (0–5)</label>
+          <input type="number" id="destRating" placeholder="Ex: 4.8" min="0" max="5" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>Nº de avaliações</label>
+          <input type="number" id="destReviews" placeholder="Ex: 1200" min="0">
+        </div>
+        <div class="form-group">
+          <label>Badge / Etiqueta</label>
+          <input type="text" id="destBadge" placeholder="Ex: Maravilha Natural">
+        </div>
+        <div class="form-group">
+          <label>Compatibilidade (0–100)</label>
+          <input type="number" id="destMatch" placeholder="Ex: 96" min="0" max="100">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label>URL da imagem *</label>
+          <input type="url" id="destImage" placeholder="https://…" oninput="previewImage()">
+          <img id="destImagePreview" src="" alt="" style="margin-top:10px;width:100%;height:140px;object-fit:cover;border-radius:6px;display:none;border:1px solid var(--gray-200)">
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Categorias</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="destCatCheckboxes">
+            <label style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:400;text-transform:none;letter-spacing:0;cursor:pointer"><input type="checkbox" value="praia"> Praia</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:400;text-transform:none;letter-spacing:0;cursor:pointer"><input type="checkbox" value="natureza"> Natureza</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:400;text-transform:none;letter-spacing:0;cursor:pointer"><input type="checkbox" value="cultural"> Cultural</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:400;text-transform:none;letter-spacing:0;cursor:pointer"><input type="checkbox" value="histórico"> Histórico</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:400;text-transform:none;letter-spacing:0;cursor:pointer"><input type="checkbox" value="aventura"> Aventura</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:400;text-transform:none;letter-spacing:0;cursor:pointer"><input type="checkbox" value="montanha"> Montanha</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:400;text-transform:none;letter-spacing:0;cursor:pointer"><input type="checkbox" value="gastronomia"> Gastronomia</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('destModal')">Cancelar</button>
+      <button class="btn btn-primary" id="destSaveBtn" onclick="saveDest()">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Guardar destino
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- ── Layout ─────────────────────────────────────────────── -->
 <div class="admin-layout">
 
@@ -743,6 +823,10 @@
       </a>
 
       <div class="nav-group-label">Sistema</div>
+      <a href="#" data-section="destinations" onclick="switchSection('destinations',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Destinos
+      </a>
       <a href="dashboard.html">
         <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Ir para o site
@@ -908,6 +992,53 @@
         </div>
       </div>
 
+      <!-- ── DESTINOS ───────────────────────────────────── -->
+      <div class="admin-section" id="sec-destinations">
+        <div class="section-hd">
+          <h2>Destinos turísticos</h2>
+          <button class="btn btn-primary" onclick="openDestForm()">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo destino
+          </button>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-toolbar">
+            <input class="tbl-search" type="search" placeholder="Pesquisar por nome ou localização…" id="destSearch" oninput="filterDests()">
+            <select class="tbl-filter" id="destCatFilter" onchange="filterDests()">
+              <option value="">Todas as categorias</option>
+              <option value="praia">Praia</option>
+              <option value="natureza">Natureza</option>
+              <option value="cultural">Cultural</option>
+              <option value="histórico">Histórico</option>
+              <option value="aventura">Aventura</option>
+              <option value="montanha">Montanha</option>
+              <option value="gastronomia">Gastronomia</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Localização</th>
+                <th>Categorias</th>
+                <th>Preço</th>
+                <th>Avaliação</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="destsTableBody">
+              <tr class="loading-row"><td colspan="8"><span class="spinner"></span>A carregar…</td></tr>
+            </tbody>
+          </table>
+          <div class="tbl-pagination">
+            <span class="tbl-pagination-info" id="destsPagInfo"></span>
+            <div class="tbl-page-btns" id="destsPagBtns"></div>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /admin-content -->
   </div><!-- /admin-main -->
 </div><!-- /admin-layout -->
@@ -984,7 +1115,7 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 // ── Section switch ────────────────────────────────────────────
 const sectionTitles = {
   overview:'Visão Geral', users:'Utilizadores',
-  trips:'Viagens', favorites:'Favoritos'
+  trips:'Viagens', favorites:'Favoritos', destinations:'Destinos Turísticos'
 };
 function switchSection(name, el) {
   document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
@@ -995,8 +1126,9 @@ function switchSection(name, el) {
 
   if (name === 'users'     && !allUsers.length)  loadUsers();
   if (name === 'trips'     && !allTrips.length)  loadTrips();
-  if (name === 'favorites' && !allFavs.length)   loadFavorites();
-  if (name === 'overview')                       loadOverview();
+  if (name === 'favorites'    && !allFavs.length)   loadFavorites();
+  if (name === 'destinations' && !allDests.length)  loadDestinations();
+  if (name === 'overview')                          loadOverview();
   return false;
 }
 
@@ -1319,6 +1451,166 @@ function renderPag(containerId, totalPages, current, onPage) {
 // ── Escape HTML ────────────────────────────────────────────────
 function esc(str) {
   return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DESTINOS
+// ═══════════════════════════════════════════════════════════════
+let allDests  = [];
+let destsPage = 1;
+
+async function loadDestinations() {
+  document.getElementById('destsTableBody').innerHTML =
+    '<tr class="loading-row"><td colspan="8"><span class="spinner"></span>A carregar…</td></tr>';
+  try {
+    const data = await api('api/destinations.php');
+    allDests = data.destinations || [];
+    renderDests();
+  } catch { toast('Erro ao carregar destinos', 'error'); }
+}
+
+function filterDests() { destsPage = 1; renderDests(); }
+
+function renderDests() {
+  const q   = (document.getElementById('destSearch')?.value || '').toLowerCase();
+  const cat = document.getElementById('destCatFilter')?.value || '';
+  let rows  = allDests.filter(d => {
+    const matchQ = !q || d.name.toLowerCase().includes(q) || d.location.toLowerCase().includes(q);
+    const matchC = !cat || (d.categories || []).includes(cat);
+    return matchQ && matchC;
+  });
+
+  const total = rows.length;
+  const start = (destsPage - 1) * PER_PAGE;
+  const page  = rows.slice(start, start + PER_PAGE);
+
+  const tbody = document.getElementById('destsTableBody');
+  if (!page.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="tbl-empty">Nenhum destino encontrado.</td></tr>';
+  } else {
+    tbody.innerHTML = page.map(d => {
+      const cats = (d.categories || []).map(c =>
+        `<span class="badge badge-blue" style="margin:1px">${esc(c)}</span>`).join('');
+      const stars = '★'.repeat(Math.round(d.rating)) + '☆'.repeat(5 - Math.round(d.rating));
+      return `
+      <tr>
+        <td style="color:var(--gray-400);font-size:.72rem">#${d.id}</td>
+        <td><img src="${esc(d.image)}" alt="" style="width:52px;height:38px;object-fit:cover;border-radius:4px"></td>
+        <td style="font-weight:500;max-width:160px">${esc(d.name)}<br><span style="font-size:.68rem;color:var(--gray-400);font-weight:300">${esc(d.badge)}</span></td>
+        <td style="font-size:.76rem;color:var(--gray-600)">${esc(d.location)}</td>
+        <td>${cats || '<span style="color:var(--gray-400)">—</span>'}</td>
+        <td style="font-size:.76rem">${esc(d.price)}</td>
+        <td>
+          <span style="color:var(--amber);font-size:.78rem">${stars}</span><br>
+          <span style="font-size:.68rem;color:var(--gray-400)">${d.rating} · ${d.reviews} rev.</span>
+        </td>
+        <td>
+          <div class="tbl-actions">
+            <button class="tbl-btn tbl-btn-warn" onclick="editDest(${d.id})">Editar</button>
+            <button class="tbl-btn tbl-btn-danger" onclick="deleteDest(${d.id},'${esc(d.name)}')">Apagar</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('destsPagInfo').textContent = `${total} destino${total !== 1 ? 's' : ''}`;
+  renderPag('destsPagBtns', Math.ceil(total / PER_PAGE), destsPage, p => { destsPage = p; renderDests(); });
+}
+
+function openDestForm(dest = null) {
+  document.getElementById('destModalTitle').textContent = dest ? 'Editar destino' : 'Novo destino turístico';
+  document.getElementById('destId').value          = dest?.id || '';
+  document.getElementById('destName').value        = dest?.name || '';
+  document.getElementById('destLocation').value    = dest?.location || '';
+  document.getElementById('destClimate').value     = dest?.climate || '';
+  document.getElementById('destDescription').value = dest?.description || '';
+  document.getElementById('destPrice').value       = dest?.price || '';
+  document.getElementById('destPriceNum').value    = dest?.price_num || '';
+  document.getElementById('destRating').value      = dest?.rating || '4.5';
+  document.getElementById('destReviews').value     = dest?.reviews || '0';
+  document.getElementById('destBadge').value       = dest?.badge || '';
+  document.getElementById('destMatch').value       = dest?.match || '80';
+  document.getElementById('destImage').value       = dest?.image || '';
+
+  // Preview
+  const prev = document.getElementById('destImagePreview');
+  if (dest?.image) { prev.src = dest.image; prev.style.display = 'block'; }
+  else { prev.src = ''; prev.style.display = 'none'; }
+
+  // Checkboxes
+  document.querySelectorAll('#destCatCheckboxes input').forEach(cb => {
+    cb.checked = (dest?.categories || []).includes(cb.value);
+  });
+
+  openModal('destModal');
+}
+
+function editDest(id) {
+  const d = allDests.find(x => x.id == id);
+  if (d) openDestForm(d);
+}
+
+function previewImage() {
+  const url  = document.getElementById('destImage').value.trim();
+  const prev = document.getElementById('destImagePreview');
+  if (url) { prev.src = url; prev.style.display = 'block'; }
+  else     { prev.src = ''; prev.style.display = 'none'; }
+}
+
+async function saveDest() {
+  const id = document.getElementById('destId').value;
+  const categories = [...document.querySelectorAll('#destCatCheckboxes input:checked')].map(cb => cb.value);
+
+  const payload = {
+    id:          id ? parseInt(id) : undefined,
+    name:        document.getElementById('destName').value.trim(),
+    location:    document.getElementById('destLocation').value.trim(),
+    climate:     document.getElementById('destClimate').value.trim(),
+    description: document.getElementById('destDescription').value.trim(),
+    price:       document.getElementById('destPrice').value.trim(),
+    price_num:   parseInt(document.getElementById('destPriceNum').value) || 0,
+    rating:      parseFloat(document.getElementById('destRating').value) || 4.5,
+    reviews:     parseInt(document.getElementById('destReviews').value) || 0,
+    badge:       document.getElementById('destBadge').value.trim(),
+    match:       parseInt(document.getElementById('destMatch').value) || 80,
+    image:       document.getElementById('destImage').value.trim(),
+    categories,
+  };
+
+  if (!payload.name || !payload.location || !payload.description || !payload.price || !payload.image) {
+    toast('Preencha os campos obrigatórios (*)', 'error'); return;
+  }
+
+  const btn = document.getElementById('destSaveBtn');
+  btn.disabled = true; btn.textContent = 'A guardar…';
+
+  try {
+    const method = id ? 'PUT' : 'POST';
+    const data   = await api('api/destinations.php', method, payload);
+    if (data.success) {
+      toast(data.message, 'success');
+      closeModal('destModal');
+      allDests = []; // reset cache
+      loadDestinations();
+    } else {
+      toast(data.message || 'Erro ao guardar.', 'error');
+    }
+  } catch { toast('Erro de ligação.', 'error'); }
+  finally { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Guardar destino'; }
+}
+
+function deleteDest(id, name) {
+  confirm('Apagar destino', `Apagar "${name}"? Esta acção não pode ser desfeita.`, async () => {
+    try {
+      const data = await api('api/destinations.php', 'DELETE', { id });
+      if (data.success) {
+        toast('Destino apagado.', 'success');
+        allDests = allDests.filter(d => d.id != id);
+        renderDests();
+      } else { toast(data.message || 'Erro ao apagar.', 'error'); }
+    } catch { toast('Erro de ligação.', 'error'); }
+  });
 }
 
 // ── Init ───────────────────────────────────────────────────────
