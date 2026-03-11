@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wanderlust — Descubra Destinos à Sua Medida</title>
+  <meta name="description" content="Recomendações personalizadas de destinos turísticos para o viajante moderno.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="landing">
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 16 16"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"/></svg>
+        </div>
+        <span class="logo-wordmark">Wander<span>lust</span></span>
+      </a>
+
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="#destinations">Destinos</a></li>
+        <li><a href="#how-it-works">Como Funciona</a></li>
+        <li><a href="dashboard.html" id="nav-dashboard" style="display:none">Área Pessoal</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html" class="nav-link-login" id="nav-login">Entrar</a>
+        <a href="register.html" class="btn btn-primary btn-sm hide-mobile" id="nav-register">Criar Conta</a>
+        <a href="#" class="btn btn-outline-light btn-sm" id="nav-logout" style="display:none">Sair</a>
+      </div>
+
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Recomendações Personalizadas</div>
+
+      <h1>Descubra os melhores<br>destinos turísticos<br><em>para si</em></h1>
+
+      <p>O nosso algoritmo aprende as suas preferências e entrega<br>roteiros feitos à medida para a sua próxima aventura.</p>
+
+      <!-- Search -->
+      <div class="hero-search">
+        <div class="search-field">
+          <label>Destino</label>
+          <input type="text" id="hero-search-input" placeholder="Praia, montanha, cidade...">
+        </div>
+        <div class="search-field">
+          <label>Quando</label>
+          <input type="text" placeholder="Qualquer data">
+        </div>
+        <button class="search-btn" id="hero-search-btn">Pesquisar</button>
+      </div>
+
+      <div class="hero-cta">
+        <a href="register.html" class="btn btn-primary">Explorar destinos</a>
+        <a href="#how-it-works" class="btn btn-outline-light">Como funciona</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>500+</strong>
+          <span>Destinos</span>
+        </div>
+        <div class="hero-stat">
+          <strong>48 mil</strong>
+          <span>Viajantes</span>
+        </div>
+        <div class="hero-stat">
+          <strong>4.9 / 5</strong>
+          <span>Avaliação</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <span class="scroll-label">Rolar</span>
+      <div class="scroll-track"></div>
+    </div>
+  </section>
+
+  <!-- DESTINOS POPULARES -->
+  <section class="section-destinations" id="destinations">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">Populares agora</span>
+          <h2 class="section-title">Destinos que vão<br>surpreender</h2>
+          <p class="section-subtitle">Lugares selecionados com base em milhares de avaliações e dados de satisfação de viajantes.</p>
+        </div>
+        <a href="register.html" class="btn btn-dark">Ver todos</a>
+      </div>
+
+      <!-- Filtros por categoria -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="todos">Todos</button>
+        <button class="filter-tab" data-filter="praia">Praia</button>
+        <button class="filter-tab" data-filter="natureza">Natureza</button>
+        <button class="filter-tab" data-filter="cultural">Cultural</button>
+        <button class="filter-tab" data-filter="histórico">Histórico</button>
+        <button class="filter-tab" data-filter="aventura">Aventura</button>
+        <button class="filter-tab" data-filter="gastronomia">Gastronomia</button>
+      </div>
+
+      <div class="destinations-grid" id="destinations-grid" style="margin-top:36px"></div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="section-how" id="how-it-works">
+    <div class="container">
+      <div style="max-width:500px">
+        <span class="section-tag">Processo</span>
+        <h2 class="section-title" style="color:var(--white)">Três passos para<br><em style="font-style:italic;color:rgba(255,255,255,.55)">a viagem perfeita</em></h2>
+        <p class="section-subtitle" style="color:rgba(255,255,255,.4)">Do registo às recomendações personalizadas — simples, rápido e gratuito.</p>
+      </div>
+
+      <div class="how-grid">
+        <div class="how-step reveal">
+          <span class="step-number">01</span>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3>Crie a sua conta</h3>
+          <p>Registo gratuito em menos de um minuto. Sem cartão de crédito nem compromisso.</p>
+        </div>
+        <div class="how-step reveal reveal-delay-1">
+          <span class="step-number">02</span>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>Defina preferências</h3>
+          <p>Praia ou montanha? Cultura ou aventura? Escolha o tipo de turismo e o seu orçamento em Kwanzas.</p>
+        </div>
+        <div class="how-step reveal reveal-delay-2">
+          <span class="step-number">03</span>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h3>Receba recomendações</h3>
+          <p>O algoritmo gera destinos alinhados ao seu perfil, com preços em Kwanzas, clima e tempo de viagem.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:56px;padding-top:48px;border-top:1px solid rgba(255,255,255,.07)">
+        <a href="register.html" class="btn btn-primary" style="padding:15px 36px">Começar agora — é gratuito</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTAQUES -->
+  <section class="section-highlights">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">Melhor avaliados</span>
+          <h2 class="section-title">Destaques da<br>temporada</h2>
+        </div>
+        <a href="register.html" class="btn btn-dark">Ver todos</a>
+      </div>
+
+      <div class="highlights-grid reveal">
+        <div class="highlight-card featured" onclick="handleCardClick(1)" style="cursor:pointer">
+          <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=900&q=80" alt="Bali, Indonésia">
+          <div class="highlight-overlay">
+            <div class="hl-rating">4.9 · 2.341 avaliações</div>
+            <div class="hl-name">Bali, Indonésia</div>
+            <div class="hl-location">Ásia · Indonésia</div>
+          </div>
+        </div>
+        <div class="highlight-card" onclick="handleCardClick(2)" style="cursor:pointer">
+          <img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?w=600&q=80" alt="Machu Picchu">
+          <div class="highlight-overlay">
+            <div class="hl-rating">4.8 · 1.890 avaliações</div>
+            <div class="hl-name">Machu Picchu</div>
+            <div class="hl-location">América do Sul · Peru</div>
+          </div>
+        </div>
+        <div class="highlight-card" onclick="handleCardClick(3)" style="cursor:pointer">
+          <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&q=80" alt="Santorini">
+          <div class="highlight-overlay">
+            <div class="hl-rating">4.8 · 3.120 avaliações</div>
+            <div class="hl-name">Santorini</div>
+            <div class="hl-location">Europa · Grécia</div>
+          </div>
+        </div>
+        <div class="highlight-card" onclick="handleCardClick(5)" style="cursor:pointer">
+          <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80" alt="Quioto">
+          <div class="highlight-overlay">
+            <div class="hl-rating">4.9 · 2.780 avaliações</div>
+            <div class="hl-name">Quioto, Japão</div>
+            <div class="hl-location">Ásia · Japão</div>
+          </div>
+        </div>
+        <div class="highlight-card" onclick="handleCardClick(7)" style="cursor:pointer">
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80" alt="Paris">
+          <div class="highlight-overlay">
+            <div class="hl-rating">4.7 · 4.521 avaliações</div>
+            <div class="hl-name">Paris, França</div>
+            <div class="hl-location">Europa · França</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <div class="container">
+      <h2>Pronto para a sua próxima aventura?</h2>
+      <p>Junte-se a 48.000 viajantes que já descobriram destinos incríveis com o Wanderlust.</p>
+      <a href="register.html" class="btn btn-white">Criar conta gratuita</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo-wordmark">Wander<span>lust</span></span>
+          <p>Plataforma de recomendação de destinos turísticos personalizados para o viajante moderno. Tecnologia ao serviço da descoberta.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-link" title="Instagram">In</a>
+            <a href="#" class="footer-social-link" title="Twitter">Tw</a>
+            <a href="#" class="footer-social-link" title="Facebook">Fb</a>
+            <a href="#" class="footer-social-link" title="YouTube">Yt</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Destinos</h4>
+          <a href="#">América do Sul</a>
+          <a href="#">Europa</a>
+          <a href="#">Ásia</a>
+          <a href="#">Brasil</a>
+          <a href="#">Oceania</a>
+        </div>
+        <div class="footer-col">
+          <h4>Plataforma</h4>
+          <a href="index.html">Início</a>
+          <a href="#how-it-works">Como Funciona</a>
+          <a href="register.html">Criar Conta</a>
+          <a href="login.html">Entrar</a>
+        </div>
+        <div class="footer-col">
+          <h4>Suporte</h4>
+          <a href="#">Central de Ajuda</a>
+          <a href="#">Contacto</a>
+          <a href="#">Termos de Uso</a>
+          <a href="#">Privacidade</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Wanderlust. Todos os direitos reservados.</span>
+        <span>Luanda, Angola</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL DESTINO -->
+  <div class="modal-overlay" id="dest-modal">
+    <div class="modal">
+      <div class="modal-img">
+        <img id="modal-img" src="" alt="">
+      </div>
+      <div class="modal-body">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-title"></h2>
+          <button class="modal-close" id="modal-close" aria-label="Fechar">✕</button>
+        </div>
+        <div class="modal-rating" id="modal-rating"></div>
+        <div class="modal-meta">
+          <span class="modal-chip" id="modal-location"></span>
+          <span class="modal-chip" id="modal-climate"></span>
+          <span id="modal-cats"></span>
+        </div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-footer">
+          <div class="modal-price" id="modal-price"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" id="modal-fav-btn">Guardar</button>
+            <a href="register.html" class="btn btn-primary btn-sm">Planear viagem</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

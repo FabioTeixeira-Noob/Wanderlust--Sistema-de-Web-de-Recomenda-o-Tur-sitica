@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Conta — Wanderlust</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="register">
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 16 16"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"/></svg>
+        </div>
+        <span class="logo-wordmark">Wander<span>lust</span></span>
+      </a>
+      <a href="login.html" class="nav-link-login">Já tenho conta</a>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <!-- Visual -->
+    <div class="auth-visual">
+      <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=900&q=80" alt="Paisagem">
+      <div class="auth-visual-overlay"></div>
+      <div class="auth-visual-content">
+        <h2>Comece a sua<br><em>jornada hoje</em></h2>
+        <p>Recomendações feitas para o<br>seu perfil de viajante.</p>
+
+        <div style="margin-top:44px;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:28px;height:28px;background:var(--terracota);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--white)">1</div>
+            <span style="font-size:.84rem;color:rgba(255,255,255,.7);font-weight:300">Crie a sua conta gratuita</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:28px;height:28px;background:rgba(196,98,58,.3);border:1px solid rgba(196,98,58,.4);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--terracota)">2</div>
+            <span style="font-size:.84rem;color:rgba(255,255,255,.42);font-weight:300">Defina as suas preferências</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:28px;height:28px;background:rgba(196,98,58,.1);border:1px solid rgba(196,98,58,.2);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:rgba(196,98,58,.45)">3</div>
+            <span style="font-size:.84rem;color:rgba(255,255,255,.26);font-weight:300">Receba recomendações</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="auth-form-side">
+      <div class="auth-form-container">
+        <div class="auth-logo">
+          <div class="logo-mark">
+            <svg viewBox="0 0 16 16"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"/></svg>
+          </div>
+          <span class="logo-wordmark">Wander<span>lust</span></span>
+        </div>
+
+        <h1 class="auth-title">Criar conta</h1>
+        <p class="auth-sub">Gratuito para sempre. Sem cartão de crédito.</p>
+
+        <form id="register-form" novalidate>
+          <div class="form-group">
+            <label for="name">Nome completo</label>
+            <input type="text" id="name" name="name" placeholder="O seu nome" autocomplete="name">
+            <span class="error-msg"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Endereço de email</label>
+            <input type="email" id="email" name="email" placeholder="o.seu@email.com" autocomplete="email">
+            <span class="error-msg"></span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input type="password" id="password" name="password" placeholder="Mín. 6 caracteres">
+              <span class="error-msg"></span>
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirmar senha</label>
+              <input type="password" id="confirm-password" name="confirm-password" placeholder="Repetir senha">
+              <span class="error-msg"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Localização (opcional)</label>
+            <select id="location" name="location">
+              <option value="">Selecione a sua província</option>
+              <option>Luanda</option>
+              <option>Benguela</option>
+              <option>Huambo</option>
+              <option>Huíla</option>
+              <option>Cabinda</option>
+              <option>Malanje</option>
+              <option>Uíge</option>
+              <option>Zaire</option>
+              <option>Lunda Norte</option>
+              <option>Lunda Sul</option>
+              <option>Moxico</option>
+              <option>Bié</option>
+              <option>Kuanza Sul</option>
+              <option>Kuanza Norte</option>
+              <option>Namibe</option>
+              <option>Cunene</option>
+              <option>Cuando Cubango</option>
+              <option>Outra</option>
+            </select>
+          </div>
+
+          <p style="font-size:.74rem;color:var(--gray-600);line-height:1.65;margin-bottom:22px;font-weight:300">
+            Ao criar uma conta aceita os nossos
+            <a href="#" style="color:var(--petrol);font-weight:500">Termos de Uso</a> e
+            <a href="#" style="color:var(--petrol);font-weight:500">Política de Privacidade</a>.
+          </p>
+
+          <button type="submit" class="btn btn-primary btn-full">Criar conta gratuita</button>
+        </form>
+
+        <div class="auth-divider">ou registe-se com</div>
+
+        <div class="social-btns">
+          <button class="social-btn">Google</button>
+          <button class="social-btn">Facebook</button>
+        </div>
+
+        <div class="auth-switch">
+          Já tem conta? <a href="login.html">Entrar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

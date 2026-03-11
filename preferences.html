@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preferências — Wanderlust</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="preferences">
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 16 16"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"/></svg>
+        </div>
+        <span class="logo-wordmark">Wander<span>lust</span></span>
+      </a>
+      <span style="font-size:.72rem;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase">Passo 2 de 2</span>
+    </div>
+  </nav>
+
+  <div class="pref-page">
+    <div class="pref-header">
+      <span class="section-tag" style="color:rgba(196,98,58,.7)">Quase lá</span>
+      <h1>Conte-nos sobre<br>as suas viagens</h1>
+      <p>Isto ajuda-nos a recomendar destinos adequados ao seu perfil.</p>
+
+      <div class="pref-steps">
+        <div class="pref-step-dot done"></div>
+        <div class="pref-step-line-h"></div>
+        <div class="pref-step-dot done"></div>
+        <div class="pref-step-line-h"></div>
+        <div class="pref-step-dot done"></div>
+        <div class="pref-step-line-h"></div>
+        <div class="pref-step-dot" style="background:rgba(255,255,255,.12)"></div>
+      </div>
+    </div>
+
+    <div class="pref-body">
+      <form id="preferences-form">
+
+        <!-- Tipos de turismo -->
+        <div class="pref-card reveal">
+          <h3>Que tipo de turismo prefere?</h3>
+          <p class="card-sub">Selecione todos os que se aplicam ao seu perfil.</p>
+
+          <div class="tourism-grid">
+            <div class="tourism-item">
+              <input type="checkbox" id="cat-praia" name="categories" value="praia">
+              <label class="tourism-label" for="cat-praia">
+                <span class="t-icon">
+                  <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </span>
+                Praia
+              </label>
+            </div>
+            <div class="tourism-item">
+              <input type="checkbox" id="cat-natureza" name="categories" value="natureza">
+              <label class="tourism-label" for="cat-natureza">
+                <span class="t-icon">
+                  <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </span>
+                Natureza
+              </label>
+            </div>
+            <div class="tourism-item">
+              <input type="checkbox" id="cat-cultural" name="categories" value="cultural">
+              <label class="tourism-label" for="cat-cultural">
+                <span class="t-icon">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </span>
+                Cultural
+              </label>
+            </div>
+            <div class="tourism-item">
+              <input type="checkbox" id="cat-historico" name="categories" value="histórico">
+              <label class="tourism-label" for="cat-historico">
+                <span class="t-icon">
+                  <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                </span>
+                Histórico
+              </label>
+            </div>
+            <div class="tourism-item">
+              <input type="checkbox" id="cat-aventura" name="categories" value="aventura">
+              <label class="tourism-label" for="cat-aventura">
+                <span class="t-icon">
+                  <svg viewBox="0 0 24 24"><polygon points="3 17 12 3 21 17"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+                </span>
+                Aventura
+              </label>
+            </div>
+            <div class="tourism-item">
+              <input type="checkbox" id="cat-gastronomia" name="categories" value="gastronomia">
+              <label class="tourism-label" for="cat-gastronomia">
+                <span class="t-icon">
+                  <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                </span>
+                Gastronomia
+              </label>
+            </div>
+            <div class="tourism-item">
+              <input type="checkbox" id="cat-montanha" name="categories" value="montanha">
+              <label class="tourism-label" for="cat-montanha">
+                <span class="t-icon">
+                  <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                </span>
+                Montanha
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orçamento -->
+        <div class="pref-card reveal reveal-delay-1">
+          <h3>Qual é o seu orçamento por viagem?</h3>
+          <p class="card-sub">Valores indicativos em Kwanzas (AOA).</p>
+
+          <div class="pref-options-grid">
+            <div class="pref-option">
+              <input type="radio" id="budget-low" name="budget" value="baixo">
+              <label class="pref-option-label" for="budget-low">
+                <strong>Económico</strong>
+                <span>Até 1.000.000 Kz</span>
+              </label>
+            </div>
+            <div class="pref-option">
+              <input type="radio" id="budget-mid" name="budget" value="médio" checked>
+              <label class="pref-option-label" for="budget-mid">
+                <strong>Moderado</strong>
+                <span>1M – 3M Kz</span>
+              </label>
+            </div>
+            <div class="pref-option">
+              <input type="radio" id="budget-high" name="budget" value="alto">
+              <label class="pref-option-label" for="budget-high">
+                <strong>Premium</strong>
+                <span>Acima de 3M Kz</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clima -->
+        <div class="pref-card reveal reveal-delay-2">
+          <h3>Que clima prefere?</h3>
+          <p class="card-sub">O clima é um dos fatores mais importantes nas recomendações.</p>
+
+          <div class="pref-options-grid">
+            <div class="pref-option">
+              <input type="radio" id="climate-hot" name="climate" value="quente">
+              <label class="pref-option-label" for="climate-hot">
+                <strong>Quente</strong>
+                <span>Acima de 28°C</span>
+              </label>
+            </div>
+            <div class="pref-option">
+              <input type="radio" id="climate-tropical" name="climate" value="tropical" checked>
+              <label class="pref-option-label" for="climate-tropical">
+                <strong>Tropical</strong>
+                <span>22°C – 30°C</span>
+              </label>
+            </div>
+            <div class="pref-option">
+              <input type="radio" id="climate-cold" name="climate" value="frio">
+              <label class="pref-option-label" for="climate-cold">
+                <strong>Frio</strong>
+                <span>Abaixo de 15°C</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Distância -->
+        <div class="pref-card reveal reveal-delay-3">
+          <h3>Distância máxima de viagem</h3>
+          <p class="card-sub">Tempo de voo ou deslocação total tolerado.</p>
+
+          <div class="range-group">
+            <input type="range" id="distance" name="distance" min="2" max="24" value="12" step="1">
+            <div class="range-info">
+              <span>2h — Nacional</span>
+              <strong>Até <span id="distance-val">12</span>h de viagem</strong>
+              <span>24h — Internacional</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pref-actions">
+          <a href="dashboard.html" class="btn btn-ghost">Ignorar por agora</a>
+          <button type="submit" class="btn btn-primary" style="padding:14px 34px">Guardar e ver recomendações</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    const range = document.getElementById('distance');
+    const val   = document.getElementById('distance-val');
+    if (range && val) {
+      range.addEventListener('input', () => { val.textContent = range.value; });
+    }
+  </script>
+</body>
+</html>

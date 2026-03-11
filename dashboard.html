@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área Pessoal — Wanderlust</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 900;
+      width: 48px; height: 48px;
+      background: var(--ink);
+      box-shadow: var(--shadow-lg);
+      align-items: center; justify-content: center;
+      cursor: pointer;
+      border: none;
+    }
+    .mobile-menu-btn svg { width: 18px; height: 18px; stroke: var(--white); fill: none; stroke-width: 1.5; }
+    @media (max-width: 1100px) {
+      .sidebar {
+        display: block !important;
+        position: fixed;
+        left: -260px; top: 70px;
+        height: calc(100vh - 70px);
+        width: 244px;
+        z-index: 800;
+        transition: left .28s ease;
+      }
+      .sidebar.open { left: 0; }
+      .mobile-menu-btn { display: flex; }
+    }
+  </style>
+</head>
+<body data-page="dashboard">
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 16 16"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z"/></svg>
+        </div>
+        <span class="logo-wordmark">Wander<span>lust</span></span>
+      </a>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="text-align:right">
+          <div style="font-size:.8rem;font-weight:600;color:var(--white)" class="user-name">Viajante</div>
+          <div style="font-size:.67rem;color:rgba(255,255,255,.35)">Área Pessoal</div>
+        </div>
+        <div class="sidebar-avatar user-avatar-letter" style="width:38px;height:38px;font-size:.95rem">V</div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar user-avatar-letter">V</div>
+        <h4 class="user-name">Viajante</h4>
+        <span>Explorador</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Principal</div>
+        <a href="#overview" class="active">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Visão Geral
+        </a>
+        <a href="#recommended">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Recomendados
+        </a>
+        <a href="#popular">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Populares
+        </a>
+        <a href="#favorites">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Favoritos
+        </a>
+
+        <div class="nav-section-label">Conta</div>
+        <a href="preferences.html">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Preferências
+        </a>
+        <a href="#" id="sidebar-logout">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Terminar sessão
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+      <div class="dash-header" id="overview">
+        <h1>Bem-vindo, <span class="user-name">Viajante</span></h1>
+        <p>Aqui estão as suas recomendações personalizadas para hoje.</p>
+      </div>
+
+      <!-- Estatísticas -->
+      <div class="dash-stats">
+        <div class="stat-card reveal">
+          <div class="stat-card-label">Destinos explorados</div>
+          <strong>12</strong>
+          <span>em 4 países</span>
+        </div>
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-card-label">Favoritos guardados</div>
+          <strong id="stat-favorites">0</strong>
+          <span>destinos</span>
+        </div>
+        <div class="stat-card reveal reveal-delay-2">
+          <div class="stat-card-label">Avaliação média</div>
+          <strong>4.9</strong>
+          <span>dos seus destinos</span>
+        </div>
+        <div class="stat-card reveal reveal-delay-3">
+          <div class="stat-card-label">Compatibilidade</div>
+          <strong>97%</strong>
+          <span>melhor recomendação</span>
+        </div>
+      </div>
+
+      <!-- Recomendados -->
+      <div class="dash-section" id="recommended">
+        <div class="dash-section-header">
+          <h2>Recomendados para si</h2>
+          <a href="preferences.html">Ajustar preferências</a>
+        </div>
+        <div class="dash-grid" id="recommended-grid"></div>
+      </div>
+
+      <!-- Populares -->
+      <div class="dash-section" id="popular">
+        <div class="dash-section-header">
+          <h2>Destinos populares</h2>
+          <a href="#">Ver todos</a>
+        </div>
+        <div class="dash-grid" id="popular-grid"></div>
+      </div>
+
+      <!-- Favoritos -->
+      <div class="dash-section" id="favorites">
+        <div class="dash-section-header">
+          <h2>Os seus favoritos</h2>
+          <a href="#">Ver todos</a>
+        </div>
+        <div class="dash-grid" id="favorites-grid"></div>
+      </div>
+
+      <!-- Banner de atualização -->
+      <div style="background:var(--petrol);border-radius:var(--radius);padding:36px 40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;margin-top:16px">
+        <div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--white);margin-bottom:7px;font-weight:500">
+            Refine as suas recomendações
+          </h3>
+          <p style="color:rgba(255,255,255,.42);font-size:.83rem;max-width:380px;font-weight:300;line-height:1.7">
+            Atualize as suas preferências para receber destinos ainda mais alinhados ao seu perfil de viajante.
+          </p>
+        </div>
+        <a href="preferences.html" class="btn btn-primary" style="flex-shrink:0">Atualizar preferências</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile sidebar toggle -->
+  <button class="mobile-menu-btn" id="mobile-sidebar-btn" aria-label="Menu">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <!-- Modal destino -->
+  <div class="modal-overlay" id="dest-modal">
+    <div class="modal">
+      <div class="modal-img">
+        <img id="modal-img" src="" alt="">
+      </div>
+      <div class="modal-body">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-title"></h2>
+          <button class="modal-close" id="modal-close" aria-label="Fechar">✕</button>
+        </div>
+        <div class="modal-rating" id="modal-rating"></div>
+        <div class="modal-meta">
+          <span class="modal-chip" id="modal-location"></span>
+          <span class="modal-chip" id="modal-climate"></span>
+          <span id="modal-cats"></span>
+        </div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-footer">
+          <div class="modal-price" id="modal-price"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" id="modal-fav-btn">Guardar</button>
+            <button class="btn btn-primary btn-sm" onclick="showToast('Funcionalidade disponível em breve.','')">Planear viagem</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Mobile sidebar
+    document.getElementById('mobile-sidebar-btn')?.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // Sidebar smooth scroll
+    document.querySelectorAll('.sidebar-nav a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const id = a.getAttribute('href').slice(1);
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.querySelectorAll('.sidebar-nav a').forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+        document.getElementById('sidebar').classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>
