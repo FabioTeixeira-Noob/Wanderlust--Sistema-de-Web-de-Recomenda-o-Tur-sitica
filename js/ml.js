@@ -8,8 +8,6 @@
  *
  * Tudo corre no browser — sem servidor, sem dependências externas.
  * Os dados persistem via localStorage.
- *
- * Como usar: <script src="js/ml.js"></script>  após  script.js
  */
 
 /* ═══════════════════════════════════════════════════════════
